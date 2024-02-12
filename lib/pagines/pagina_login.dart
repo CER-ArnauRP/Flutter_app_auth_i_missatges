@@ -14,6 +14,10 @@ class _PaginaLoginState extends State<PaginaLogin> {
   final controladorEmail = TextEditingController();
   final controladorPassword = TextEditingController();
 
+  void ferLogin() { // void Function()?
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +69,7 @@ class _PaginaLoginState extends State<PaginaLogin> {
 
                 // Botó Sign in
                 BotoPersonalitzat(
-                  accioOnTap: () {}, 
+                  accioOnTap: ferLogin, 
                   textDelBoto: "Login",
                 ),
 

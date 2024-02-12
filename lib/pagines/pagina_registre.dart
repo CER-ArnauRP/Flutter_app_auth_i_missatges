@@ -14,6 +14,10 @@ class __PaginaRegistrStateState extends State<PaginaRegistre> {
   final controladorPassword = TextEditingController();
   final controladorConfirmarPassword = TextEditingController();
 
+  void crearCompte() { // void Function()?
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,7 +78,7 @@ class __PaginaRegistrStateState extends State<PaginaRegistre> {
 
                 // Botó Sign in
                 BotoPersonalitzat(
-                  accioOnTap: () {}, 
+                  accioOnTap: crearCompte, 
                   textDelBoto: "Crear compte",
                 ),
 
