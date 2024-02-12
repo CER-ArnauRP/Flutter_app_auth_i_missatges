@@ -1,4 +1,5 @@
 import 'package:app_auth_i_missatges/pagines/pagina_login.dart';
+import 'package:app_auth_i_missatges/pagines/pagina_registre.dart';
 import 'package:flutter/material.dart';
 
 /*
@@ -20,7 +21,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: PaginaLogin(),
+      home: PaginaRegistre(),
     );
   }
 }
