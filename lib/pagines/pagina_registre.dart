@@ -3,7 +3,11 @@ import 'package:app_auth_i_missatges/components/text_field_personalitzat.dart';
 import 'package:flutter/material.dart';
 
 class PaginaRegistre extends StatefulWidget {
-  const PaginaRegistre({super.key});
+
+  // Per navegar de registre a login
+  final void Function()? alFerClic;
+
+  const PaginaRegistre({super.key, required this.alFerClic,});
 
   @override
   State<PaginaRegistre> createState() => __PaginaRegistrStateState();
@@ -84,15 +88,19 @@ class __PaginaRegistrStateState extends State<PaginaRegistre> {
 
                 const SizedBox(height: 25,),
 
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Ja ets membre?"),
-                    SizedBox(width: 4,),
-                    Text(
-                      "Fes login",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                    const Text("Ja ets membre?"),
+                    const SizedBox(width: 4,),
+                    GestureDetector(
+                      onTap: widget.alFerClic,
+                      //widget. al davant, perquè està declarada en la classe inicial.
+                      child: const Text(
+                        "Fes login",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
