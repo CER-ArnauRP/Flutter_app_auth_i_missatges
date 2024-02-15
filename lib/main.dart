@@ -24,3 +24,6 @@ class MainApp extends StatelessWidget {
     );
   }
 }
+
+// Delete the pubspec.lock file and running flutter pub get again 
+//    when it doesn't find the imports.
