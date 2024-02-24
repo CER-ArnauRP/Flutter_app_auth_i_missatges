@@ -33,3 +33,22 @@ class MainApp extends StatelessWidget {
 
 // Delete the pubspec.lock file and running flutter pub get again 
 //    when it doesn't find the imports.
+
+/*
+Projecte de Firebase: FlutterChatApp (compte escola)
+====================================================
+*/
+
+// Llistar els usuaris de l'aplicació
+// ==================================
+// 1) Habilitar la Firestore Database.
+//    - Seleccionar la regió.
+//    - Triar "Start in production mode"
+//    - Anar a "Rules", i canviar el "allow read, write: if true;"
+//        (i prémer "Publicar").
+//
+// 2) Crear un arxiu pels serveis de chat:
+//    - serveis/chat/servei_chat.dart
+//
+// 3) Importar la llibreria de Firestore:
+//    - flutter pub add cloud_firestore
