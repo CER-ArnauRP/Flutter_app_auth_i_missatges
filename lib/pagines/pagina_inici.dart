@@ -1,4 +1,5 @@
 import 'package:app_auth_i_missatges/auth/servei_auth.dart';
+import 'package:app_auth_i_missatges/components/drawer_aplicacio.dart';
 import 'package:flutter/material.dart';
 
 class PaginaInici extends StatelessWidget {
@@ -21,6 +22,7 @@ class PaginaInici extends StatelessWidget {
           ),
         ],
       ),
+      drawer: DrawerAplicacio(),
     );
   }
 }
