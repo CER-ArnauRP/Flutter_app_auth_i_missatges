@@ -1,12 +1,19 @@
+import 'package:app_auth_i_missatges/auth/servei_auth.dart';
+import 'package:app_auth_i_missatges/pagines/pagina_configuracio.dart';
 import 'package:flutter/material.dart';
 
 class DrawerAplicacio extends StatelessWidget {
   const DrawerAplicacio({super.key});
 
+  void logout() {
+    final serveiAuth = ServeiAuth();
+    serveiAuth.tancarSessio();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Colors.grey[400],
+      backgroundColor: Colors.grey[800],
       child: Column(
         // Dues columnes i el "spaceBetween" per fer que l'última opció
         //    aparegui al final.
@@ -35,7 +42,9 @@ class DrawerAplicacio extends StatelessWidget {
                   Icons.home,
                   color: Colors.white,
                 ),
-                onTap: () {},
+                onTap: () {
+                  Navigator.pop(context);
+                },
               ),
 
               // Opció Configuració.
@@ -48,7 +57,15 @@ class DrawerAplicacio extends StatelessWidget {
                   Icons.settings,
                   color: Colors.white,
                 ),
-                onTap: () {},
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PaginaConfiguracio(),
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -62,7 +79,7 @@ class DrawerAplicacio extends StatelessWidget {
               Icons.logout,
               color: Colors.white,
             ),
-            onTap: () {},
+            onTap: logout,
           ),
         ],
       ),
