@@ -1,6 +1,7 @@
 import 'dart:js';
 
 import 'package:app_auth_i_missatges/auth/servei_auth.dart';
+import 'package:app_auth_i_missatges/components/bombolla_chat.dart';
 import 'package:app_auth_i_missatges/components/text_field_personalitzat.dart';
 import 'package:app_auth_i_missatges/serveis/chat/servei_chat.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -82,28 +83,55 @@ class PaginaChat extends StatelessWidget {
   Widget _construirItemMissatge(DocumentSnapshot documentSnapshot) {
     Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
 
-    return Text(data["missatge"]);
+    // Si és l'usuari actual.
+    bool esUsuariActual =
+        data["idDeLAutor"] == _serveiAuth.getUsuariActual()!.uid;
+
+    // Mostrar missatges de l'usuari actual a la dreta, si no, a l'esquerra.
+    var aliniament =
+        esUsuariActual ? Alignment.centerRight : Alignment.centerLeft;
+
+    return Container(
+      alignment: aliniament,
+      child: BombollaChat(
+        missatge: data["missatge"],
+        esUsuariActual: esUsuariActual,
+      ), //Text(data["missatge"],),
+    );
   }
 
   // Construim la zona d'input de l'usuari.
   Widget _construirZonaInputUsuari() {
-    return Row(
-      children: [
-        // TextField.
-        Expanded(
-          child: TextFieldPersonalitzat(
-            controladorTextField: _controladorMissatge,
-            hintTextField: "Escriu un missatge",
-            ocultarText: false,
+    return Padding(
+      padding: const EdgeInsets.only(left: 25, bottom: 50),
+      child: Row(
+        children: [
+          // TextField.
+          Expanded(
+            child: TextFieldPersonalitzat(
+              controladorTextField: _controladorMissatge,
+              hintTextField: "Escriu un missatge",
+              ocultarText: false,
+            ),
           ),
-        ),
 
-        // Botó.
-        IconButton(
-          onPressed: enviarMissatge,
-          icon: const Icon(Icons.arrow_upward),
-        ),
-      ],
+          // Botó.
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.green,
+              shape: BoxShape.circle,
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 25),
+            child: IconButton(
+              onPressed: enviarMissatge,
+              icon: const Icon(
+                Icons.arrow_upward,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
