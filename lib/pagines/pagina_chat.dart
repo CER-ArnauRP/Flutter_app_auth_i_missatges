@@ -82,7 +82,20 @@ class PaginaChat extends StatelessWidget {
   Widget _construirItemMissatge(DocumentSnapshot documentSnapshot) {
     Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
 
-    return Text(data["missatge"]);
+    // Si és l'usuari actual.
+    bool esUsuariActual =
+        data["idDeLAutor"] == _serveiAuth.getUsuariActual()!.uid;
+
+    // Mostrar missatges de l'usuari actual a la dreta, si no, a l'esquerra.
+    var aliniament =
+        esUsuariActual ? Alignment.centerRight : Alignment.centerLeft;
+
+    return Container(
+      alignment: aliniament,
+      child: Text(
+        data["missatge"],
+      ),
+    );
   }
 
   // Construim la zona d'input de l'usuari.
