@@ -78,6 +78,7 @@ class PaginaInici extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => PaginaChat(
                 emailDeAmbQuiParlem: dadesUsuari["email"],
+                idDeQuiRepElMissatge: dadesUsuari["uid"],
               ),
             ),
           );
