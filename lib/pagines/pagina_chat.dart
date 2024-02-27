@@ -7,35 +7,90 @@ import 'package:app_auth_i_missatges/serveis/chat/servei_chat.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class PaginaChat extends StatelessWidget {
+class PaginaChat extends StatefulWidget {
   final String emailDeAmbQuiParlem;
   final String idDeQuiRepElMissatge;
 
-  PaginaChat({
+  const PaginaChat({
     super.key,
     required this.emailDeAmbQuiParlem,
     required this.idDeQuiRepElMissatge,
   });
 
+  @override
+  State<PaginaChat> createState() => _PaginaChatState();
+}
+
+class _PaginaChatState extends State<PaginaChat> {
   final TextEditingController _controladorMissatge = TextEditingController();
+
   final ServeiChat _serveiChat = ServeiChat();
   final ServeiAuth _serveiAuth = ServeiAuth();
+
+  // -----------------------------------------------------------------
+  // Fer que el llistat de missatges es mostri des de sota (l'últim), 
+  //    i hagis de pujar per veure els missatges anteriors.
+  // Creem un node focused.
+  FocusNode nodeFocus = FocusNode();
+  @override
+  void initState() {
+    super.initState();
+
+    // Afegim un listener al FocusNode.
+    nodeFocus.addListener(() {
+      // Si estem en focus, esperem a què el teclat virtual del 
+      //    dispositiu es mostri. Llavors calculem el que quedi 
+      //    d'espai per mostrar els missatges.
+      // Quan es mostri el teclat, esperem un moment (500 milisegons).
+      Future.delayed(const Duration(milliseconds: 500), () => ferScrollCapAVall(),);
+    });
+
+    // Lo anterior era per tenir en compte el teclat, en cas de dispositiu mòbil.
+    // Lo de a continuació és perquè la llista de missatges estigui a baix directament.
+    // Esperem a què la ListView estigui construïda, i després fem que vagi a baix.
+    Future.delayed(const Duration(milliseconds: 500), () => ferScrollCapAVall(),);
+  }
+
+  @override
+  void dispose() {
+    // Eliminem el FocusNode i els controladors.
+    nodeFocus.dispose();
+    _controladorMissatge.dispose();
+
+    super.dispose();
+  }
+
+  // Controlador Scroll.
+  final ScrollController _scrollController = ScrollController();
+  void ferScrollCapAVall() {
+
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent, 
+      duration: const Duration(seconds: 1), 
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+  // -----------------------------------------------------------------
 
   void enviarMissatge() async {
     if (_controladorMissatge.text.isNotEmpty) {
       await _serveiChat.enviarMissatge(
-          idDeQuiRepElMissatge, _controladorMissatge.text);
+          widget.idDeQuiRepElMissatge, _controladorMissatge.text);
 
       // Netejem el camp de text.
       _controladorMissatge.clear();
     }
+
+    // Quan hem enviat el missatge, volem que faci scroll cap a vall,
+    //    perquè es mostri l'últim missatge.
+    ferScrollCapAVall();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(emailDeAmbQuiParlem),
+        title: Text(widget.emailDeAmbQuiParlem),
       ),
       body: Column(
         children: [
@@ -57,7 +112,7 @@ class PaginaChat extends StatelessWidget {
 
     return StreamBuilder(
       stream: _serveiChat.getMissatges(
-          idDeQuiRepElMissatge, idDeQuiEnviaElMissatges),
+          widget.idDeQuiRepElMissatge, idDeQuiEnviaElMissatges),
       builder: (context, snapshot) {
         // Errors.
         if (snapshot.hasError) {
@@ -71,6 +126,7 @@ class PaginaChat extends StatelessWidget {
 
         // Retornar ListView.
         return ListView(
+          controller: _scrollController,
           children: snapshot.data!.docs
               .map((document) => _construirItemMissatge(document))
               .toList(),
@@ -112,16 +168,17 @@ class PaginaChat extends StatelessWidget {
               controladorTextField: _controladorMissatge,
               hintTextField: "Escriu un missatge",
               ocultarText: false,
+              focusNode: nodeFocus,
             ),
           ),
 
           // Botó.
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.green,
               shape: BoxShape.circle,
             ),
-            padding: EdgeInsets.symmetric(horizontal: 25),
+            padding: const EdgeInsets.symmetric(horizontal: 25),
             child: IconButton(
               onPressed: enviarMissatge,
               icon: const Icon(
